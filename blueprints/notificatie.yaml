@@ -25,25 +25,18 @@ blueprint:
   
 triggers: 
   - triggers: !input trigger
-  - trigger: event
-    event_type: mobile_app_notification_action
-    id: event
-    event_data:
-      action: "{{ 'CONFIRM_' ~ context.id }}"
 
 
 actions: 
- - if: 
-       - condition: trigger
-         id: event
-   then: !input actie
-   else:
-     - action: notify.mobile_app_iphone
-       data:
-         message: !input message
-         data:
-           actions:
-            - action: "{{ 'CONFIRM_' ~ context.id }}"
-              title: !input confirm_action
-
-  
+ - action: notify.mobile_app_iphone
+   data:
+     message: !input message
+     data:
+       actions:
+         - action: "{{ 'CONFIRM_' ~ context.id }}"
+           title: !input confirm_action
+ - wait_for_trigger: 
+   - event_type: mobile_app_notification_action
+     event_data:
+      action: "{{ 'CONFIRM_' ~ context.id }}"
+ - !input actie
