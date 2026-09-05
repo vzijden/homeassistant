@@ -23,7 +23,7 @@ triggers:
 actions: 
  - action: notify.send_message
    target:
-     entity_id: notify.iphone_van_vincent
+     entity_id: notify.iphone
    data:
      message: test
 
