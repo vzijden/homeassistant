@@ -36,7 +36,8 @@ actions:
          - action: "{{ 'CONFIRM_' ~ context.id }}"
            title: !input confirm_action
  - wait_for_trigger: 
-   - event_type: mobile_app_notification_action
+   - trigger: event
+     event_type: mobile_app_notification_action
      event_data:
       action: "{{ 'CONFIRM_' ~ context.id }}"
  - !input actie
