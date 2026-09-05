@@ -3,15 +3,24 @@ blueprint:
   domain: automation
   name: Notificaties
   input:
+    message:
+      name: "Bericht"
+      selector: 
+        text: 
+    confirm_action:
+      name: Uitvoeren actie
+      selector: 
+        text:
+      default: Uitvoeren
+    trigger:
+      name: "trigger"
+      selector: 
+        trigger:
     actie:
       name: "Actie"
       description: "Actie om uit te voeren bij bevestiging"
       selector: 
         action:
-    trigger:
-      name: "trigger"
-      selector: 
-        trigger:
           
   
 triggers: 
@@ -32,7 +41,12 @@ actions:
      - action: notify.send_message
        target:
          entity_id: notify.iphone
+       data:
+         message: !input message
          data:
            message: test
+         actions:
+          - action: "{{ 'CONFIRM_' ~ context.id }}"
+            title: !input confirm_action
 
   
