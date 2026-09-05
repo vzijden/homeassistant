@@ -1,0 +1,29 @@
+# $schema: https://git.sr.ht/~johnhamelink/hass-json-schema/blob/main/json-schemas/blueprint-automation.json
+blueprint:
+  domain: automation
+  name: Notificaties
+  input:
+    actie:
+      name: "Actie"
+      description: "Actie om uit te voeren bij bevestiging"
+      selector: 
+        action:
+    trigger:
+      name: "trigger"
+      selector: 
+        trigger:
+  
+triggers: 
+  - event_type: mobile_app_notification_action
+    event_data:
+      action: "{{ 'CONFIRM_' ~ context.id }}"
+
+
+actions: 
+ - action: notify.send_message
+   target:
+     entity_id: notify.iphone_van_vincent
+   data:
+     message: test
+
+  
