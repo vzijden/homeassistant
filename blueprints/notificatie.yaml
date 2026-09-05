@@ -14,7 +14,7 @@ blueprint:
         trigger:
   
 triggers: 
-  - trigger: !input trigger
+  - triggers: !input trigger
     id: trigger
   - trigger: event
     event_type: mobile_app_notification_action
