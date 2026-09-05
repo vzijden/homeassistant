@@ -12,24 +12,27 @@ blueprint:
       name: "trigger"
       selector: 
         trigger:
+          
   
 triggers: 
   - triggers: !input trigger
-    id: trigger
   - trigger: event
     event_type: mobile_app_notification_action
+    id: event
     event_data:
       action: "{{ 'CONFIRM_' ~ context.id }}"
 
 
 actions: 
- - condition: trigger
-   id: trigger
-  
- - action: notify.send_message
-   target:
-     entity_id: notify.iphone
-   data:
-     message: test
+ - if: 
+       - condition: trigger
+         id: event
+   then: !input actie
+   else:
+     - action: notify.send_message
+       target:
+         entity_id: notify.iphone
+         data:
+           message: test
 
   
