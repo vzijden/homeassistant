@@ -38,9 +38,7 @@ actions:
          id: event
    then: !input actie
    else:
-     - action: notify.send_message
-       target:
-         entity_id: notify.iphone
+     - action: notify.mobile_app_iphone
        data:
          message: !input message
          data:
