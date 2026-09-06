@@ -47,7 +47,7 @@ actions:
            - action: "{{ 'CONFIRM_' ~ context.id }}"
              title: !input confirm_action
  - if:
-     - !input notify_chris
+     - "{{ !input notify_chris }}"
    then:
    - action: notify.mobile_app_iphone_christine
      data:
