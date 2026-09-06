@@ -37,7 +37,8 @@ triggers:
 
 actions: 
  - if:
-     - "{{ !input notify_vincent }}"
+     - condition: template 
+       value_template: "{{ !input notify_vincent }}"
    then:
      - action: notify.mobile_app_iphone
        data:
@@ -47,7 +48,8 @@ actions:
              - action: "{{ 'CONFIRM_' ~ context.id }}"
                title: !input confirm_action
  - if:
-     - "{{ !input notify_chris }}"
+     - condition: template 
+       value_template: "{{ !input notify_chris }}"
    then:
      - action: notify.mobile_app_iphone_christine
        data:
