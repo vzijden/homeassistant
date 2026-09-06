@@ -32,6 +32,9 @@ blueprint:
       selector: 
         action:
           
+variables:
+  notify_chris: !input notify_chris
+  notify_vincent: !input notify_vincent
   
 triggers: 
   - triggers: !input trigger
@@ -40,7 +43,7 @@ triggers:
 actions: 
  - if:
      - condition: template 
-       value_template: "{{ !input notify_vincent }}"
+       value_template: "{{ states('notify_vincent') }}"
    then:
      - action: notify.mobile_app_iphone
        data:
@@ -51,7 +54,7 @@ actions:
                title: !input confirm_action
  - if:
      - condition: template 
-       value_template: "{{ !input notify_chris }}"
+       value_template: "{{ states('notify_chris') }}"
    then:
      - action: notify.mobile_app_iphone_christine
        data:
