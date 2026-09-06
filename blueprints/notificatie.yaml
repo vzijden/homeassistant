@@ -39,23 +39,23 @@ actions:
  - if:
      - "{{ !input notify_vincent }}"
    then:
-   - action: notify.mobile_app_iphone
-     data:
-       message: !input message
+     - action: notify.mobile_app_iphone
        data:
-         actions:
-           - action: "{{ 'CONFIRM_' ~ context.id }}"
-             title: !input confirm_action
+         message: !input message
+         data:
+           actions:
+             - action: "{{ 'CONFIRM_' ~ context.id }}"
+               title: !input confirm_action
  - if:
      - "{{ !input notify_chris }}"
    then:
-   - action: notify.mobile_app_iphone_christine
-     data:
-       message: !input message
+     - action: notify.mobile_app_iphone_christine
        data:
-         actions:
-           - action: "{{ 'CONFIRM_' ~ context.id }}"
-             title: !input confirm_action
+         message: !input message
+         data:
+           actions:
+             - action: "{{ 'CONFIRM_' ~ context.id }}"
+               title: !input confirm_action
  - wait_for_trigger: 
    - trigger: event
      event_type: mobile_app_notification_action
