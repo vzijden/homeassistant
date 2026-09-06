@@ -61,4 +61,4 @@ actions:
      event_type: mobile_app_notification_action
      event_data:
       action: "{{ 'CONFIRM_' ~ context.id }}"
- - sequence: !input actie:
+ - sequence: !input actie
