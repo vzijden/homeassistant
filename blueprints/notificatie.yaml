@@ -56,7 +56,7 @@ actions:
                title: !input confirm_action
  - if:
      - condition: template 
-       value_template: "{{ states('notify_chris') == true} }"
+       value_template: "{{ states('notify_chris') == true }}"
    then:
      - action: notify.mobile_app_iphone_christine
        data:
