@@ -36,10 +36,20 @@ triggers:
 
 
 actions: 
- - if: 
-     - condition: !input notify_vincent
+ - if:
+     - !input notify_vincent
    then:
    - action: notify.mobile_app_iphone
+     data:
+       message: !input message
+       data:
+         actions:
+           - action: "{{ 'CONFIRM_' ~ context.id }}"
+             title: !input confirm_action
+ - if:
+     - !input notify_chris
+   then:
+   - action: notify.mobile_app_iphone_christine
      data:
        message: !input message
        data:
