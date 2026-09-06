@@ -45,7 +45,8 @@ triggers:
 actions: 
  - if:
      - condition: template 
-       value_template: "{{ states('notify_vincent') == true }}"
+       value_template: >
+         {{ states('notify_vincent') == true }}
    then:
      - action: notify.mobile_app_iphone
        data:
