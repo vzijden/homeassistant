@@ -43,7 +43,7 @@ triggers:
 actions: 
  - if:
      - condition: template 
-       value_template: "{{ states('notify_vincent') }}"
+       value_template: "{{ states('notify_vincent') == true }}"
    then:
      - action: notify.mobile_app_iphone
        data:
@@ -54,7 +54,7 @@ actions:
                title: !input confirm_action
  - if:
      - condition: template 
-       value_template: "{{ states('notify_chris') }}"
+       value_template: "{{ states('notify_chris') == true} }"
    then:
      - action: notify.mobile_app_iphone_christine
        data:
