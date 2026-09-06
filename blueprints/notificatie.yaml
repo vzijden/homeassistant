@@ -7,6 +7,14 @@ blueprint:
       name: "Bericht"
       selector: 
         text: 
+    notify_vincent:
+      name: Meld aan Vincent
+      selector: 
+        boolean: 
+    notify_chris:
+      name: Meld aan Christine
+      selector: 
+        boolean: 
     confirm_action:
       name: Uitvoeren actie
       selector: 
@@ -28,16 +36,19 @@ triggers:
 
 
 actions: 
- - action: notify.mobile_app_iphone
-   data:
-     message: !input message
+ - if: 
+     - condition: !input notify_vincent
+   then:
+   - action: notify.mobile_app_iphone
      data:
-       actions:
-         - action: "{{ 'CONFIRM_' ~ context.id }}"
-           title: !input confirm_action
+       message: !input message
+       data:
+         actions:
+           - action: "{{ 'CONFIRM_' ~ context.id }}"
+             title: !input confirm_action
  - wait_for_trigger: 
    - trigger: event
      event_type: mobile_app_notification_action
      event_data:
       action: "{{ 'CONFIRM_' ~ context.id }}"
- - sequence: !input actie
+ - sequence: !input actie:
