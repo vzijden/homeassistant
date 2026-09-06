@@ -37,7 +37,7 @@ triggers:
 
 actions: 
  - if:
-     - !input notify_vincent
+     - "{{ !input notify_vincent }}"
    then:
    - action: notify.mobile_app_iphone
      data:
