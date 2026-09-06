@@ -31,7 +31,9 @@ blueprint:
       description: "Actie om uit te voeren bij bevestiging"
       selector: 
         action:
- mode: restart
+
+mode: restart
+
 variables:
   notify_chris: !input notify_chris
   notify_vincent: !input notify_vincent
