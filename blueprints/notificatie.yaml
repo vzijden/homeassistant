@@ -11,10 +11,12 @@ blueprint:
       name: Meld aan Vincent
       selector: 
         boolean: 
+      default: true
     notify_chris:
       name: Meld aan Christine
       selector: 
         boolean: 
+      default: true
     confirm_action:
       name: Uitvoeren actie
       selector: 
