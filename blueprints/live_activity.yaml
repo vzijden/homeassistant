@@ -1,0 +1,155 @@
+# $schema: https://git.sr.ht/~johnhamelink/hass-json-schema/blob/main/json-schemas/blueprint-automation.json
+blueprint:
+  domain: automation
+  name: iOS Live Activity
+  description: >
+    Start, update of beëindig een iOS Live Activity op de iPhone van Vincent
+    en/of Christine. Verstuurt alleen naar iemand als deze zowel geselecteerd
+    is (via de boolean) als thuis is (via de person entity).
+  input:
+    trigger:
+      name: Trigger
+      selector:
+        trigger:
+    event:
+      name: Actie
+      description: Start, update of beëindig de live activity
+      selector:
+        select:
+          options:
+            - start
+            - update
+            - end
+      default: update
+    attributes_type:
+      name: Live Activity type
+      description: >
+        De ActivityAttributes type naam zoals geregistreerd in de iOS app.
+        Alleen nodig bij event "start".
+      selector:
+        text:
+      default: ""
+    attributes:
+      name: Attributes
+      description: Statische data voor de live activity, alleen gebruikt bij event "start"
+      selector:
+        object:
+      default: {}
+    content_state:
+      name: Content state
+      description: Dynamische data voor de live activity (bij start, update en end)
+      selector:
+        object:
+    stale_date:
+      name: Stale date
+      description: Optioneel. Unix timestamp waarna de activity als verouderd wordt gemarkeerd
+      selector:
+        text:
+      default: ""
+    dismissal_date:
+      name: Dismissal date
+      description: Optioneel, alleen gebruikt bij event "end"
+      selector:
+        text:
+      default: ""
+    alert_title:
+      name: Alert titel
+      description: Optioneel, alleen gebruikt bij event "update"
+      selector:
+        text:
+      default: ""
+    alert_body:
+      name: Alert tekst
+      description: Optioneel, alleen gebruikt bij event "update"
+      selector:
+        text:
+      default: ""
+    notify_vincent:
+      name: Stuur naar Vincent
+      description: Verstuur deze live activity naar het toestel van Vincent
+      selector:
+        boolean:
+      default: true
+    notify_christine:
+      name: Stuur naar Christine
+      description: Verstuur deze live activity naar het toestel van Christine
+      selector:
+        boolean:
+      default: true
+    person_vincent:
+      name: Persoon Vincent
+      description: Gebruikt om te bepalen of Vincent thuis is
+      selector:
+        entity:
+          domain: person
+      default: person.vincent
+    person_christine:
+      name: Persoon Christine
+      description: Gebruikt om te bepalen of Christine thuis is
+      selector:
+        entity:
+          domain: person
+      default: person.christine
+
+mode: restart
+
+variables:
+  event: !input event
+  attributes_type: !input attributes_type
+  attributes: !input attributes
+  content_state: !input content_state
+  stale_date: !input stale_date
+  dismissal_date: !input dismissal_date
+  alert_title: !input alert_title
+  alert_body: !input alert_body
+  notify_vincent: !input notify_vincent
+  notify_christine: !input notify_christine
+  live_activity_payload: >
+    {% set payload = {
+      'event': event,
+      'content-state': content_state,
+      'timestamp': now().timestamp() | int
+    } %}
+    {% if event == 'start' %}
+      {% set _ = payload.update({'attributes-type': attributes_type, 'attributes': attributes}) %}
+    {% endif %}
+    {% if stale_date %}
+      {% set _ = payload.update({'stale-date': stale_date | int}) %}
+    {% endif %}
+    {% if event == 'end' and dismissal_date %}
+      {% set _ = payload.update({'dismissal-date': dismissal_date | int}) %}
+    {% endif %}
+    {% if event == 'update' and (alert_title or alert_body) %}
+      {% set alert = {} %}
+      {% if alert_title %}{% set _ = alert.update({'title': alert_title}) %}{% endif %}
+      {% if alert_body %}{% set _ = alert.update({'body': alert_body}) %}{% endif %}
+      {% set _ = payload.update({'alert': alert}) %}
+    {% endif %}
+    {{ payload }}
+
+triggers:
+  - triggers: !input trigger
+
+actions:
+  - if:
+      - condition: template
+        value_template: "{{ notify_vincent }}"
+      - condition: state
+        entity_id: !input person_vincent
+        state: "home"
+    then:
+      - action: notify.mobile_app_iphone
+        data:
+          message: "ignored"
+          data: "{{ live_activity_payload }}"
+  - if:
+      - condition: template
+        value_template: "{{ notify_christine }}"
+      - condition: state
+        entity_id: !input person_christine
+        state: "home"
+    then:
+      - action: notify.mobile_app_iphone_van_christine
+        data:
+          message: "ignored"
+          data: "{{ live_activity_payload }}"
